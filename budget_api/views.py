@@ -6,8 +6,66 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from budget_api.models import Budget, Category, Transaction
-from budget_api.serializers import BudgetSerializer, CategorySerializer, TransactionSerializer
+from budget_api.models import Budget, Category, Transaction, BudgetTemplate, CategoryTemplate
+from budget_api.serializers import BudgetTemplateSerializer, CategoryTemplateSerializer, BudgetSerializer, CategorySerializer, TransactionSerializer
+
+#---------------BugetTemplates
+
+class BudgetTemplateList(APIView):
+    def get(self, request, format=None):
+        budgetTemplates = BudgetTemplate.objects.all()
+        serializer = BudgetTemplateSerializer(budgetTemplates, many=True)
+        
+        return Response(serializer.data)
+        
+    def post(self, request, format=None):
+        serializer = BudgetTemplateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class BudgetTemplateDetail(APIView):
+    def get(self, request, pk, format=None):
+        budgetTemplate = BudgetTemplate.objects.get(pk=pk)
+        serializer = BudgetTemplateSerializer(budgetTemplate)
+        
+        return Response(serializer.data)
+        
+    def delete(self, request, pk, format=None):
+        budgetTemplate = BudgetTemplate.objects.get(pk=pk)
+        budgetTemplate.categorytemplate_set.all().delete()
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+class BudgetTemplateCategoryList(APIView):
+    def get(self, request, pk, format=None):
+        budgetTemplate = BudgetTemplate.objects.get(pk=pk)
+        
+        serializer = BudgetTemplateSerializer(budgetTemplate.categorytemplate_set.all(), many=True)
+        return Response(serializer.data)
+        
+#---------------CategoryTemplates
+        
+        
+class CategoryTemplateList(APIView):
+    def post(self, request, format=None):
+        serializer = CategoryTemplateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+      
+      
+class CategoryTemplateDetail(APIView):
+    def delete(self, request, pk, format=None):
+        categoryTemplate = CategoryTemplate.objects.get(pk=pk)
+        categoryTemplate.delete()
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+
+#---------------Budgets
 
 class BudgetList(APIView):
     def get(self, request, format=None):
@@ -16,12 +74,21 @@ class BudgetList(APIView):
         
         return Response(serializer.data)
         
+    def post(self, request, format=None):
+        serializer = BudgetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class BudgetDetail(APIView):
     def get(self, request, pk, format=None):
         budget = Budget.objects.get(pk=pk)
         serializer = BudgetSerializer(budget)
         
         return Response(serializer.data)
+        
+#---------------Categories
         
 class CategoryList(APIView):
     def post(self, request, format=None):
@@ -38,6 +105,8 @@ class CategoryList(APIView):
         
         return Response(serializer.data)
         
+#---------------Transactions
+        
 class TransactionDetail(APIView):
     def get(self, request, pk, format=None):
         transaction = Transaction.objects.get(pk=pk)
@@ -50,9 +119,10 @@ class TransactionDetail(APIView):
         
         try:
             transaction = Transaction.objects.get(pk=pk)
-        except Snippet.DoesNotExist:
+        except Transaction.DoesNotExist:
             raise Http404
         
+        #add the value of this transaction back to its category
         category = transaction.category
         category.spent_amount -= transaction.amount
         category.updated_time = timezone.now()

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 
 class BudgetTemplate(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     
     created_time = models.DateTimeField(default=timezone.now)
     updated_time = models.DateTimeField(default=timezone.now)
