@@ -42,7 +42,7 @@ class BudgetTemplateCategoryList(APIView):
     def get(self, request, pk, format=None):
         budgetTemplate = BudgetTemplate.objects.get(pk=pk)
         
-        serializer = BudgetTemplateSerializer(budgetTemplate.categorytemplate_set.all(), many=True)
+        serializer = CategoryTemplateSerializer(budgetTemplate.categorytemplate_set.all(), many=True)
         return Response(serializer.data)
         
 #---------------CategoryTemplates
@@ -84,11 +84,26 @@ class BudgetList(APIView):
         return Response(serializer.data)
         
     def post(self, request, format=None):
-        serializer = BudgetSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        budget_template_id = request.data.get("budget_template")
+        
+        if budget_template_id == None:
+            serializer = BudgetSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            budget_template = BudgetTemplate.objects.get(pk=budget_template_id)
+            category_templates = budget_template.categorytemplate_set.all()
+            
+            budget = Budget(name=budget_template, description=budget_template.description, total_amount=budget_template.total_amount)
+            budget.save()
+            
+            for category_template in category_templates:
+                budget.category_set.create(name=category_template.name, description=category_template.description, allocated_amount=category_template.allocated_amount)
+            
+            serializer = BudgetSerializer(budget)
+            return Response(serializer.data)
         
 class BudgetDetail(APIView):
     def get(self, request, pk, format=None):
