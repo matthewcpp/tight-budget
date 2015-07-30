@@ -4,12 +4,12 @@ from budget_api.models import BudgetTemplate, CategoryTemplate, Budget, Category
 class BudgetTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BudgetTemplate
-        fields = ('id', 'name', 'description', 'created_time', 'updated_time')
+        fields = ('id', 'name', 'description', 'total_amount', 'created_time', 'updated_time')
         
 class CategoryTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryTemplate
-        fields = ('id', 'name', 'template', 'description', 'allocated_amount', 'rollover', 'created_time', 'updated_time')
+        fields = ('id', 'name', 'budget_template', 'description', 'allocated_amount', 'rollover', 'created_time', 'updated_time')
 
 class BudgetSerializer(serializers.ModelSerializer):
     class Meta:
