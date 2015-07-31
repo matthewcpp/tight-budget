@@ -1,0 +1,9 @@
+{% if budget_list %}
+    <ul>
+    {% for budget in budget_list %}
+        <li><a href="/budgets/{{ budget.id }}/">{{ budget.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No budgets are available.</p>
+{% endif %}

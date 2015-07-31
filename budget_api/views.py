@@ -96,7 +96,7 @@ class BudgetList(APIView):
             budget_template = BudgetTemplate.objects.get(pk=budget_template_id)
             category_templates = budget_template.categorytemplate_set.all()
             
-            budget = Budget(name=budget_template, description=budget_template.description, total_amount=budget_template.total_amount)
+            budget = Budget(name=budget_template.name, description=budget_template.description, total_amount=budget_template.total_amount)
             budget.save()
             
             for category_template in category_templates:

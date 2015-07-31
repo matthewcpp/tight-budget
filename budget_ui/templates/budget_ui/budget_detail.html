@@ -1,0 +1,15 @@
+<h3>{{ budget.name }}</h3>
+<p>Allocated: ${{ budget.total_amount }}</p>
+<p>Spent: ${{ budget.spent_amount }}
+{% ifnotequal categories.number 0 %}
+	<ul>
+	
+	{% for category in categories %}
+		<li>
+			<div><a href="categories/category{{ category.id }}">{{ category.name }}</a></div>
+			<div>${{ category.spent_amount }}/ ${{ category.allocated_amount }}</div>
+		</li>
+	{% endfor %}	
+	
+	</ul>	
+{% endifnotequal %}

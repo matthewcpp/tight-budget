@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'budget_api',
+    'budget_ui',
 )
 
 MIDDLEWARE_CLASSES = (
