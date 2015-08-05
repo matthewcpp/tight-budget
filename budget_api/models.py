@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User, Group
 
+from model_utils import FieldTracker
+
 class BudgetTemplate(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
@@ -25,6 +27,8 @@ class CategoryTemplate(models.Model):
     
     created_time = models.DateTimeField(default=timezone.now)
     updated_time = models.DateTimeField(default=timezone.now)
+    
+    tracker = FieldTracker(fields=['allocated_amount'])
     
     def __str__(self):
         return '%d: %s' % (self.id, self.name)
@@ -66,6 +70,8 @@ class Transaction(models.Model):
     
     created_time = models.DateTimeField(default=timezone.now)
     updated_time = models.DateTimeField(default=timezone.now)
+    
+    tracker = FieldTracker(fields=['amount'])
     
     def __str__(self):
         return '%d: %s' % (self.id, self.name)

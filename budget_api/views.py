@@ -54,14 +54,6 @@ class CategoryTemplateList(APIView):
         if serializer.is_valid():
             serializer.save()
             
-            category_template = serializer.instance
-            budget_template = category_template.budget_template
-            
-            budget_template.total_amount += category_template.allocated_amount
-            budget_template.updated_time = timezone.now()
-            
-            budget_template.save()
-            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
       
