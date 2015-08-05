@@ -28,7 +28,7 @@ class CategoryTemplate(models.Model):
     created_time = models.DateTimeField(default=timezone.now)
     updated_time = models.DateTimeField(default=timezone.now)
     
-    tracker = FieldTracker(fields=['allocated_amount'])
+    tracker = FieldTracker(fields=["allocated_amount"])
     
     def __str__(self):
         return '%d: %s' % (self.id, self.name)
@@ -57,6 +57,8 @@ class Category(models.Model):
     
     created_time = models.DateTimeField(default=timezone.now)
     updated_time = models.DateTimeField(default=timezone.now)
+    
+    tracker = FieldTracker(fields=["allocated_amount", "spent_amount"])
     
     def __str__(self):
         return '%d: %s' % (self.id, self.name)
