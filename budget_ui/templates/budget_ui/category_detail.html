@@ -1,0 +1,24 @@
+<h3>{{ category.name }}</h3>
+<p>{{ category.description }}<p>
+<p>Allocated: ${{ category.allocated_amount }}</p>
+<p>Spent: ${{ category.spent_amount }}
+
+{% ifnotequal transactions.number 0 %}
+<table>
+	<tr>
+		<td>Date</td>
+		<td>Name</td>
+		<td>Amount</td>
+		<td>Note</td>
+	</tr>
+	
+	{% for transaction in transactions %}
+	<tr>
+		<td>{{ transaction.created_time }}</td>
+		<td>{{ transaction.name }}</td>
+		<td>${{ transaction.amount }}</td>
+		<td>{{ transaction.description }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endifnotequal %}

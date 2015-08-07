@@ -2,9 +2,33 @@
 
 <html>
 	<head>
-		<title>Backbone Test</title>
+		<title>Tight Budget</title>
+		
+		<script type="text/javascript" src="{% static 'budget_ui/js/jquery-2.1.4.min.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/underscore-min.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/backbone-min.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/backbone-relational-min.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/tight-budget.js' %}" ></script>
+		
+		<script >
+			budget_data = {{ budget_data|safe }};
+			
+			initial_data = {
+				initialBudget:budget_data
+			};
+			
+			budgetApplication = null;
+			
+			$( document ).ready( function(){
+				budgetApplication = new TightBudget.Application(initial_data);
+				budgetApplication.start();
+			});
+		</script>
+		
 	</head>
 	<body>
-		<h3>hello world</h3>
+		<h3>Tight-Budget</h3>
+		<div id="recent-budget"></div>
+		
 	</body>
 </html>

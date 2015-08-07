@@ -15,11 +15,18 @@ class BudgetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Budget
         fields = ('id', 'name', 'description', 'total_amount', 'spent_amount', 'created_time', 'updated_time')
-        
+  
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'name', 'budget', 'description', 'allocated_amount', 'spent_amount', 'created_time', 'updated_time')
+  
+class BudgetDetailSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Budget
+        fields = ('id', 'name', 'description', 'total_amount', 'spent_amount', 'categories', 'created_time', 'updated_time')
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:

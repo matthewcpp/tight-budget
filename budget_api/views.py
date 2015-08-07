@@ -104,6 +104,20 @@ class BudgetDetail(APIView):
         
         return Response(serializer.data)
         
+    def delete(self, request, pk, format=None):
+        budget = Budget.objects.get(pk=pk)
+        budget.delete()
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+    def put(self, request, pk, format=None):
+        budget = Budget.objects.get(pk=pk)
+        serializer = BudgetSerializer(budget, data=request.data, partial=True)
+        serializer.is_valid()
+        serializer.save()
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
 #---------------Categories
         
 class CategoryList(APIView):

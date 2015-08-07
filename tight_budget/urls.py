@@ -16,12 +16,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from budget_ui.views import UiIndexView, UiBudgetsListView, UiBudgetsDetailView
+from budget_ui.views import UiIndexView, UiBudgetsListView, UiBudgetsDetailView, UiCategoryDetailView
 
 urlpatterns = [
     url(r'^$', UiIndexView.as_view()),
-    url(r'budgets/$', UiBudgetsListView.as_view()),
-    url(r'budgets/(?P<pk>[0-9]+)/$', UiBudgetsDetailView.as_view()),
+    url(r'^budgets/$', UiBudgetsListView.as_view()),
+    url(r'^budgets/(?P<pk>[0-9]+)/$', UiBudgetsDetailView.as_view()),
+    url(r'^categories/(?P<pk>[0-9]+)/$', UiCategoryDetailView.as_view()),
     
     url(r'^api/', include('budget_api.urls')),
     url(r'^admin/', include(admin.site.urls)),

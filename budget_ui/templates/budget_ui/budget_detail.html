@@ -6,7 +6,7 @@
 	
 	{% for category in categories %}
 		<li>
-			<div><a href="categories/category{{ category.id }}">{{ category.name }}</a></div>
+			<div><a href="categories/{{ category.id }}">{{ category.name }}</a></div>
 			<div>${{ category.spent_amount }}/ ${{ category.allocated_amount }}</div>
 		</li>
 	{% endfor %}	

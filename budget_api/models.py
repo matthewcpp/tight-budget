@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core import serializers
 from django.contrib.auth.models import User, Group
 
 from model_utils import FieldTracker
@@ -50,7 +51,7 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     
-    budget = models.ForeignKey(Budget)
+    budget = models.ForeignKey(Budget, related_name="categories")
     
     allocated_amount = models.FloatField()
     spent_amount = models.FloatField(default=0.0)
