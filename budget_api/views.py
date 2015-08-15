@@ -123,6 +123,7 @@ class BudgetDetail(APIView):
 class CategoryList(APIView):
     def post(self, request, format=None):
         serializer = CategorySerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -130,14 +131,14 @@ class CategoryList(APIView):
         
     def get(self, request, pk, format=None):
         budget = Budget.objects.get(pk=pk)
-        categories = budget.category_set.all()
+        categories = budget.categories.all()
         serializer = CategorySerializer(categories, many=True)
         
         return Response(serializer.data)
         
 #---------------Transactions
         
-class TransactionDetail(APIView):
+class TransactionDetail(APIView):        
     def get(self, request, pk, format=None):
         transaction = Transaction.objects.get(pk=pk)
         serializer = TransactionSerializer(transaction)
@@ -161,7 +162,15 @@ class TransactionDetail(APIView):
         transaction.delete()
         return Response(status=status.HTTP_204_NO_CONTENT) 
 
-
+class TransactionList(APIView):
+    def post(self, request, format=None):
+        serializer = TransactionSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class CategoryTransactionList(APIView):  
     def get(self, request, pk, format=None):
         category = Category.objects.get(pk=pk)

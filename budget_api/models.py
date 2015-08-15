@@ -69,7 +69,7 @@ class Transaction(models.Model):
     description = models.TextField(null=True, blank=True)
     
     amount = models.FloatField()
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, related_name="transactions")
     
     created_time = models.DateTimeField(default=timezone.now)
     updated_time = models.DateTimeField(default=timezone.now)

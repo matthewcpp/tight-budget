@@ -4,31 +4,79 @@
 	<head>
 		<title>Tight Budget</title>
 		
+		<link rel="stylesheet" type="text/css" href="{% static 'budget_ui/css/tight-budget.css' %}">
+		
 		<script type="text/javascript" src="{% static 'budget_ui/js/jquery-2.1.4.min.js' %}" ></script>
 		<script type="text/javascript" src="{% static 'budget_ui/js/underscore-min.js' %}" ></script>
 		<script type="text/javascript" src="{% static 'budget_ui/js/backbone-min.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'budget_ui/js/backbone-relational-min.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'budget_ui/js/tight-budget.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/CollectionView.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/Budget.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/Category.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/Transaction.js' %}" ></script>
+		<script type="text/javascript" src="{% static 'budget_ui/js/Application.js' %}" ></script>
+
 		
 		<script >
-			budget_data = {{ budget_data|safe }};
-			
-			initial_data = {
-				initialBudget:budget_data
+			initialData = {
+				budget: {{ budget_data|safe }},
+				categories: {{ categories_data|safe }},
 			};
 			
 			budgetApplication = null;
 			
 			$( document ).ready( function(){
-				budgetApplication = new TightBudget.Application(initial_data);
+				budgetApplication = new TightBudget.Application({
+					initialData: initialData
+				});
 				budgetApplication.start();
 			});
+			
+			
+		</script>
+		
+		<script id="budget-view-template" type="text/template">
+			<div class="budget-info"> 
+				<div class="budget-name"><%= budget.name %></div>
+				<div class="budget-status"><%= budget.spent_amount %> / <%= budget.total_amount %></div>
+			</div>
+			<div class="category-info">
+				<div class="category-list"></div>
+			</div>
+			<div class="add-item">
+				<button class="new-transaction-button">New Transaction</button>
+			</div>
+		</script>
+		
+		<script id="category-view-template" type="text/template">
+			<div class="category-name"><%= category.name %></div>
+			<div class="category-status"><%= category.spent_amount %> / <%= category.allocated_amount %></div>
+		</script>
+		
+		<script id="transaction-new-form" type="text/template">
+			<div>New Item:</div>
+			<div>
+				<label for="new-transaction-name">Name:</label><input id="new-transaction-name" type="text">;
+			</div>
+			<div>
+				<label for="new-transaction-description">Description:</label><input id="new-transaction-description" type="text">;
+			</div>
+			<div>
+				<label for="new-transaction-amount">Amount:</label><input id="new-transaction-amount" type="number">;
+				<label for="new-transaction-category">Category:</label><select id= "new-transaction-category" class="transaction-category-select">
+				<% _.each(budget.categories, function (category) { %>
+					<option value="<%= category.id %>"><%= category.name %>
+				<% }); %>
+				</select>
+			<div>
+			<button class="new-transaction-submit">Submit</button>
+			<button class="new-transaction-cancel">Cancel</button>
 		</script>
 		
 	</head>
 	<body>
 		<h3>Tight-Budget</h3>
 		<div id="recent-budget"></div>
+		<div id="new-transaction"></div>
 		
 	</body>
 </html>

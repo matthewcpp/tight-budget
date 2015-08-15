@@ -1,0 +1,10 @@
+.category-item{
+	margin: 5px 0px;
+	padding: 5px;
+	border: 1px solid gray;
+}
+
+.category-name{
+	font-size: 18px;
+	font-weight: bold;
+}
